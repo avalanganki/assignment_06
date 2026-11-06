@@ -5,3 +5,5 @@ terminology from this assignment (REST API, endpoint, HTTP status code,
 raise_for_status, API key, form data vs. JSON body, rate limit, caching,
 json_normalize, record_path, meta, grain, opinion mining, named-entity
 recognition, prompt, system prompt, reasoning model), and make it actionable.
+
+I had the most trouble with caching during this assignment. I checked whether the file name string was truthy rather than whether the file actually existed, overwrote the file name with an empty list, and forgot to save the cache in one of my extract steps. Caching is important because it eliminates redundant network requests and lets the transform steps run quickly while debugging. Separately, I ran into 401 errors because I misspelled the API key header. In the future, I will run each cache step twice to confirm the file is created and then read, name variables for what they hold so I do not overwrite them, and check that the last line of each function returns what it should.

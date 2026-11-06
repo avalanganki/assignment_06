@@ -132,38 +132,26 @@ def opinions_table(documents: list) -> pd.DataFrame:
     """
     rows = []
     for document in documents:
-        review_id = document["review_id"]
         for sentence_id, sentence in enumerate(document["sentences"]):
             assessments = sentence.get("assessments", [])
-            assessment_texts = {f"#{i}": a["text"] for i, a in enumerate(assessments)}
             for target in sentence.get("targets", []):
-                mention = target["text"]
-                mention_sentiment = target["sentiment"]
-                mention_offset = target["offset"]
-                related_assessments = [
-                    assessment_texts[rel["ref"].split("/")[-1]]
+                related = [
+                    assessments[int(rel["ref"].split("/")[-1])]["text"]
                     for rel in target.get("relations", [])
                     if rel["relationType"] == "assessment"
                 ]
-                assessments_str = ", ".join(related_assessments)
                 rows.append({
-                    "review_id": review_id,
+                    "review_id": document["review_id"],
                     "sentence_id": sentence_id,
-                    "mention": mention,
-                    "mention_sentiment": mention_sentiment,
-                    "assessments": assessments_str,
-                    "mention_offset": mention_offset,
-                    "source": "opinion"
+                    "mention": target["text"],
+                    "mention_sentiment": target["sentiment"],
+                    "assessments": ", ".join(related),
+                    "mention_offset": target["offset"],
+                    "source": "opinion",
                 })
     return pd.DataFrame(rows, columns=[
-        "review_id",
-        "sentence_id",
-        "mention",
-        "mention_sentiment",
-        "assessments",
-        "mention_offset",
-        "source"
-    ])
+        "review_id", "sentence_id", "mention", "mention_sentiment",
+        "assessments", "mention_offset", "source"])
 
 
 def entities_table(documents: list) -> pd.DataFrame:

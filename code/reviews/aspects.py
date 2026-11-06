@@ -103,7 +103,8 @@ def item_name(mention: str, aliases: dict) -> str:
         item_name("Parking downtown", aliases)  ->  "parking"
         item_name("Mocha Latte", aliases)        ->  "mocha latte"   # not an alias
     """
-    return aliases.get(mention.lower(), mention.lower())
+    key = mention.strip().lower()
+    return aliases.get(key, key)
 
 
 def build_mentions(reviews: pd.DataFrame, sentences: pd.DataFrame,
@@ -313,9 +314,10 @@ def build_messages(question: str, evidence: pd.DataFrame, limit: int = 20) -> li
     n = len(evidence)
     p = counts.get("positive", 0)
     q = counts.get("negative", 0)
+    r = n - p - q
     lines = [
         f"Question: {question}",
-        f"Facts: {n} mentions — {p} positive, {q} negative, {n - p - q} neutral or mixed.", 
+        f"Facts: {n} mentions — {p} positive, {q} negative, {r} neutral or mixed.",
         "Items, most mentioned first:",
     ]
     for row in summarize_items(evidence).itertuples():

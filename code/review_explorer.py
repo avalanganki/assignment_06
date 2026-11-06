@@ -131,7 +131,8 @@ reviews_file = os.environ.get("REVIEWS_FILE", REVIEWS_FILE)
 # 2. HEADING
 st.title("Salt City Coffee — What Customers Are Saying")
 st.markdown("Every customer review, broken into the things people talk about. "
-            "Filter by location or subject, or ask a question at the bottom of the page.")
+            "Filter by location or subject, "
+            "or ask a question at the bottom of the page.")
 
 # 3. THE DATA
 mentions = analyze_reviews(reviews_file)
